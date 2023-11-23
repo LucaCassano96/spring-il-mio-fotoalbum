@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:insert="fragments/resources :: headResources('Photo List')">
+
+</head>
+
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+<div class="container mt-5">
+
+    <h1 class="pb-3">Lista delle foto</h1>
+
+    <table class="table">
+        <thead >
+        <tr>
+            <th>Titolo</th>
+            <th>Immagine</th>
+            <th>Visibilità</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="photo : ${photoList}" th:object="${photo}">
+            <td th:text="*{title}"></td>
+            <td><img th:src="*{photo_url}" style="max-width: 200px; max-height: 100px;"/></td>
+            <td th:text="${photo.visible ? 'Visible' : 'Invisible'}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+
+</body>
+</html>
