@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/resources :: headResources('Dettaglio foto')"></head>
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+
+
+<div class="container" th:object="${photo}">
+    <h1 class="my-3">Dettaglio foto</h1>
+    <section class="my-5">
+        <div class="card my-2">
+            <h5 class="card-header my-1" th:text="*{title}"></h5>
+            <div class="card-body">
+                <h5 class="card-title my-1" th:text="*{description}"></h5>
+                <p class="card-title my-2" th:text="*{#temporals.format(created_at, 'yyyy-MM-dd')}"> </p>
+                <img class="my-2" th:src="*{photo_url}" style="max-width: 400px;"/>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <a th:href="@{/photos}" class="btn btn-primary text-white my-2">Torna alla lista</a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -23,6 +23,9 @@
             <td th:text="*{title}"></td>
             <td><img th:src="*{photo_url}" style="max-width: 200px; max-height: 100px;"/></td>
             <td th:text="${photo.visible ? 'Visible' : 'Invisible'}"></td>
+            <td>
+                <a class="text-dark fs-5" th:href="@{/photos/show/{id}(id=*{id})}" title="details"><i class="fa-solid fa-magnifying-glass"></i></a>
+            </td>
         </tr>
         </tbody>
     </table>
