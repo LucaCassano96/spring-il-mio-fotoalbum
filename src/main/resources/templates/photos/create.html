@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:insert="fragments/resources :: headResources('Photo Create')">
+
+</head>
+
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+<div class="container my-5">
+    <h1>Crea una nuova foto</h1>
+
+    <div>
+        <form id="photo-create" method="POST" th:action="@{/photos/create/store}" th:object="${photo}" class="row gy-2">
+            <div class="mb-3">
+                <label for="title" class="form-label">Titolo</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
+                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea class="form-control" id="description" rows="3" th:field="*{description}"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="photo_url" class="form-label">Inserisci immagine</label>
+                <input type="text" class="form-control" id="photo_url" th:field="*{photo_url}" th:classappend="${#fields.hasErrors('photo_url')} ? 'is-invalid'">
+                <div th:if="${#fields.hasErrors('photo_url')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('photo_url')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="visible" th:field="*{visible}">
+                <label class="form-check-label" for="visible">
+                    <span th:if="${photo.visible}">Visibile/non visibile</span>
+                    <span th:if="${not photo.visible}">Non visibile</span>
+                </label>
+            </div>
+
+            <div class="my-5">
+                <button class="btn btn-primary" type="submit">Salva</button>
+                <a th:href="@{/photos}" class="btn bg-danger text-white">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+

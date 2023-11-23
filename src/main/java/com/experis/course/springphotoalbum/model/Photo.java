@@ -1,6 +1,9 @@
 package com.experis.course.springphotoalbum.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -11,12 +14,20 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @NotBlank(message = "Il titolo non può essere vuoto")
+    @Size(max = 250, message = "La lunghezza deve essere inferiore a 255 caratteri")
     private String title;
+    @Lob
     private String description;
+    @NotBlank(message = "Il campo immagine non può essere vuoto")
     private String photo_url;
+    @NotNull(message = "Il campo visible non può essere nullo")
     private boolean visible;
     private LocalDateTime created_at;
+
+    public Photo() {
+        this.visible = true;
+    }
 
     public Integer getId() {
         return id;

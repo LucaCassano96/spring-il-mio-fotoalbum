@@ -2,15 +2,16 @@ package com.experis.course.springphotoalbum.controller;
 
 import com.experis.course.springphotoalbum.model.Photo;
 import com.experis.course.springphotoalbum.repository.PhotoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +32,17 @@ import java.util.Optional;
      // LIST PHOTOS
 
         @GetMapping
-        public String index(Model model) {
-            List<Photo> photoList = photoRepository.findAll();
-            model.addAttribute("photoList", photoList);
+        public String index(@RequestParam Optional<String> search, Model model) {
+            List<Photo> photoList;
+            if (search.isPresent()) {
+
+                photoList = photoRepository.findByTitleContainingIgnoreCase( search.get() );
+            } else {
+
+                photoList = photoRepository.findAll();
+            }
+
+            model.addAttribute( "photoList", photoList );
             return "photos/photos-list";
         }
 
@@ -50,6 +59,29 @@ import java.util.Optional;
                 throw new ResponseStatusException( HttpStatus.NOT_FOUND, "photo with id " + id + " not found" );
             }
 
+        }
+
+        //CREATE
+
+        @GetMapping("/create")
+        public String create(Model model) {
+            model.addAttribute( "photo", new Photo() );
+            return "photos/create";
+        }
+
+
+    //STORE
+
+        @PostMapping("/create/store")
+        public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult BindingResult) {
+
+            if (BindingResult.hasErrors()) {
+                return "photos/create";
+            }
+
+            formPhoto.setCreated_at( LocalDateTime.now() );
+            photoRepository.save( formPhoto );
+            return "redirect:/photos/show/" + formPhoto.getId();
         }
     }
 
