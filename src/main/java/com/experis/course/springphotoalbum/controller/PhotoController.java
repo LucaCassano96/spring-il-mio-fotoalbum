@@ -83,6 +83,50 @@ import java.util.Optional;
             photoRepository.save( formPhoto );
             return "redirect:/photos/show/" + formPhoto.getId();
         }
+
+
+        //EDIT
+
+
+        @GetMapping("/edit/{id}")
+        public String edit(@PathVariable Integer id, Model model) {
+            Optional<Photo> result = photoRepository.findById( id );
+
+            if (result.isPresent()) {
+                model.addAttribute( "photo", result.get() );
+                return "photos/edit";
+            } else {
+                throw new ResponseStatusException( HttpStatus.NOT_FOUND, "photo with id " + id + " not found" );
+            }
+
+        }
+
+
+    //UPDATE
+        @PostMapping("/edit/update/{id}")
+        public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Photo formPhoto, BindingResult BindingResult) {
+
+            if (BindingResult.hasErrors()) {
+                return "photos/edit";
+            }
+
+            Photo pizzaToEdit = photoRepository.findById( id ).orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND ) );
+            pizzaToEdit.setTitle( formPhoto.getTitle() );
+            pizzaToEdit.setDescription( formPhoto.getDescription() );
+            pizzaToEdit.setPhoto_url( formPhoto.getPhoto_url() );
+            pizzaToEdit.setVisible( formPhoto.getVisible() );
+            Photo savedPizza = photoRepository.save( pizzaToEdit );
+            return "redirect:/photos";
+        }
+
+
+            @PostMapping("/delete/{id}")
+            public String delete(@PathVariable Integer id) {
+
+            Photo pizzaToDelete = photoRepository.findById( id ).orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND ) );
+            photoRepository.deleteById( id );
+            return "redirect:/photos";
+        }
     }
 
 

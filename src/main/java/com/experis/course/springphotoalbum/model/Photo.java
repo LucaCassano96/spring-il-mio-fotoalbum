@@ -61,7 +61,7 @@ public class Photo {
         this.photo_url = photo_url;
     }
 
-    public boolean isVisible() {
+    public boolean getVisible() {
         return visible;
     }
 

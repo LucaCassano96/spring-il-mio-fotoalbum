@@ -44,6 +44,15 @@
             <td>
                 <a class="text-dark fs-5" th:href="@{/photos/show/{id}(id=*{id})}" title="details"><i class="fa-solid fa-magnifying-glass"></i></a>
             </td>
+            <td>
+                <a class="text-dark fs-5" th:href="@{/photos/edit/{id}(id=*{id})}" title="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+            </td>
+            <td>
+                <form th:action="@{/photos/delete/{id}(id=*{id})}" method="POST" onsubmit="return confirm('Sei sicuro di eliminare?')">
+
+                    <button type="submit" class="btn bg-danger text-light"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
