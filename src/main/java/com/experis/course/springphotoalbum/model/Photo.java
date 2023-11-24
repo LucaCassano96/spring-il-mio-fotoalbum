@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "photos")
@@ -24,6 +25,9 @@ public class Photo {
     @NotNull(message = "Il campo visible non può essere nullo")
     private boolean visible;
     private LocalDateTime created_at;
+
+    @ManyToMany
+    private List<Categories> categories;
 
     public Photo() {
         this.visible = true;
@@ -77,5 +81,12 @@ public class Photo {
         this.created_at = created_at;
     }
 
+    public List<Categories> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
+    }
 }
 

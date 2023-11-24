@@ -1,6 +1,8 @@
 package com.experis.course.springphotoalbum.controller;
 
+import com.experis.course.springphotoalbum.model.Categories;
 import com.experis.course.springphotoalbum.model.Photo;
+import com.experis.course.springphotoalbum.repository.CategoriesRepository;
 import com.experis.course.springphotoalbum.repository.PhotoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import java.util.Optional;
 
 
         private PhotoRepository photoRepository;
+        @Autowired
+        private CategoriesRepository categoriesRepository;
 
     @Autowired
     public PhotoController(PhotoRepository photoRepository) {
@@ -66,6 +70,7 @@ import java.util.Optional;
         @GetMapping("/create")
         public String create(Model model) {
             model.addAttribute( "photo", new Photo() );
+            model.addAttribute( "categoriesList", categoriesRepository.findAll() );
             return "photos/create";
         }
 
@@ -87,6 +92,11 @@ import java.util.Optional;
 
         //EDIT
 
+ /*   public List<Category> getAll() {
+        return categoryRepository.findByOrderByName();
+        model.addAttribute("categoryList", categoryService.getAll());
+    }*/
+
 
         @GetMapping("/edit/{id}")
         public String edit(@PathVariable Integer id, Model model) {
@@ -94,6 +104,7 @@ import java.util.Optional;
 
             if (result.isPresent()) {
                 model.addAttribute( "photo", result.get() );
+                model.addAttribute("categoriesList", categoriesRepository.findAll());
                 return "photos/edit";
             } else {
                 throw new ResponseStatusException( HttpStatus.NOT_FOUND, "photo with id " + id + " not found" );
@@ -103,22 +114,27 @@ import java.util.Optional;
 
 
     //UPDATE
-        @PostMapping("/edit/update/{id}")
-        public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Photo formPhoto, BindingResult BindingResult) {
+    @PostMapping("/edit/update/{id}")
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, Model model) {
 
-            if (BindingResult.hasErrors()) {
-                return "photos/edit";
-            }
-
-            Photo pizzaToEdit = photoRepository.findById( id ).orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND ) );
-            pizzaToEdit.setTitle( formPhoto.getTitle() );
-            pizzaToEdit.setDescription( formPhoto.getDescription() );
-            pizzaToEdit.setPhoto_url( formPhoto.getPhoto_url() );
-            pizzaToEdit.setVisible( formPhoto.getVisible() );
-            Photo savedPizza = photoRepository.save( pizzaToEdit );
-            return "redirect:/photos";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categoriesList", categoriesRepository.findAll());
+            return "photos/edit";
         }
 
+        Photo photoToEdit = photoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        photoToEdit.setTitle(formPhoto.getTitle());
+        photoToEdit.setDescription(formPhoto.getDescription());
+        photoToEdit.setPhoto_url(formPhoto.getPhoto_url());
+        photoToEdit.setVisible(formPhoto.getVisible());
+
+        List<Categories> selectedCategories = formPhoto.getCategories();
+        photoToEdit.setCategories(selectedCategories);
+        Photo savedPhoto = photoRepository.save(photoToEdit);
+
+        return "redirect:/photos";
+    }
 
             @PostMapping("/delete/{id}")
             public String delete(@PathVariable Integer id) {

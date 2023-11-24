@@ -1,16 +1,16 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" >
-<head th:insert="fragments/resources :: headResources('Photo Create')">
+<head th:insert="fragments/resources :: headResources('Photo Edit')">
 
 </head>
 
 <body>
 <nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
 <div class="container my-5">
-    <h1>Crea una nuova foto</h1>
+    <h1>Modifica una foto</h1>
 
     <div>
-        <form id="photo-create" method="POST" th:action="@{/photos/create/store}" th:object="${photo}" class="row gy-2">
+        <form id="photo-create" method="POST" th:action="@{/photos/edit/update/{id}(id=${photo.id})}" th:object="${photo}" class="row gy-2">
             <div class="mb-3">
                 <label for="title" class="form-label">Titolo</label>
                 <input type="text" class="form-control" id="title" th:field="*{title}" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
@@ -27,6 +27,7 @@
             <div class="mb-3">
                 <label for="photo_url" class="form-label">Inserisci immagine</label>
                 <input type="text" class="form-control" id="photo_url" th:field="*{photo_url}" th:classappend="${#fields.hasErrors('photo_url')} ? 'is-invalid'">
+                <img class="py-4" th:src="*{photo_url}" style="max-width: 200px">
                 <div th:if="${#fields.hasErrors('photo_url')}" class="invalid-feedback">
                     <ul>
                         <li th:each="err : ${#fields.errors('photo_url')}" th:text="${err}"></li>
@@ -54,8 +55,6 @@
                 </label>
             </div>
 
-
-
             <div class="my-5">
                 <button class="btn btn-primary" type="submit">Salva</button>
                 <a th:href="@{/photos}" class="btn bg-danger text-white">Cancel</a>
@@ -65,6 +64,7 @@
     </div>
 
 </div>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -81,5 +81,3 @@
 
 </body>
 </html>
-
-

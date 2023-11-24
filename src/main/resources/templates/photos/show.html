@@ -9,12 +9,20 @@
     <h1 class="my-3">Dettaglio foto</h1>
     <section class="my-5">
         <div class="card my-2">
-            <h5 class="card-header my-1" th:text="*{title}"></h5>
+            <h3 class="card-header my-1" th:text="*{title}"></h3>
             <div class="card-body">
                 <h5 class="card-title my-1" th:text="*{description}"></h5>
                 <p class="card-title my-2" th:text="*{#temporals.format(created_at, 'yyyy-MM-dd')}"> </p>
                 <img class="my-2" th:src="*{photo_url}" style="max-width: 400px;"/>
             </div>
+            <div class="p-3">
+                <h3>Categorie</h3>
+                <ul th:if="${photo.categories.size() > 0}">
+                    <li th:each="category : ${photo.categories}" th:text="${category.name}"></li>
+                </ul>
+                <div th:unless="${photo.categories.size() > 0}" class="alert alert-info">La lista è vuota</div>
+            </div>
+
         </div>
     </section>
 
