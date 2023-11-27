@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org">
 <head th:insert="fragments/resources :: headResources('Photo List')">
 
 </head>
@@ -22,10 +22,15 @@
             </div>
 
         </form>
+
     </div>
 
     <div class="my-3">
-        <a th:href="@{/photos/create}" class="btn btn-primary">Aggiungi una nuova foto</a>
+        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/photos/create}" class="btn btn-primary">Aggiungi una nuova foto</a>
+    </div>
+
+    <div class="my-3">
+        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{categories/create}" class="btn btn-primary">Aggiungi una nuova categoria</a>
     </div>
 
     <table class="table">
@@ -45,10 +50,10 @@
                 <a class="text-dark fs-5" th:href="@{/photos/show/{id}(id=*{id})}" title="details"><i class="fa-solid fa-magnifying-glass"></i></a>
             </td>
             <td>
-                <a class="text-dark fs-5" th:href="@{/photos/edit/{id}(id=*{id})}" title="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="text-dark fs-5" sec:authorize="hasAuthority('ADMIN')" th:href="@{/photos/edit/{id}(id=*{id})}" title="edit"><i class="fa-solid fa-pen-to-square"></i></a>
             </td>
             <td>
-                <form th:action="@{/photos/delete/{id}(id=*{id})}" method="POST" onsubmit="return confirm('Sei sicuro di eliminare?')">
+                <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/photos/delete/{id}(id=*{id})}" method="POST" onsubmit="return confirm('Sei sicuro di eliminare?')">
 
                     <button type="submit" class="btn bg-danger text-light"><i class="fa-solid fa-trash"></i></button>
                 </form>

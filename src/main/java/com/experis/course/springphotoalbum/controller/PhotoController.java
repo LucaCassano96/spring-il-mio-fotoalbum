@@ -19,10 +19,10 @@ import java.util.Optional;
 
 
 @Controller
-    @RequestMapping("/photos")
+
+    @RequestMapping({"/", "/photos"})
+
     public class PhotoController {
-
-
         private PhotoRepository photoRepository;
         @Autowired
         private CategoriesRepository categoriesRepository;
@@ -30,6 +30,11 @@ import java.util.Optional;
     @Autowired
     public PhotoController(PhotoRepository photoRepository) {
         this.photoRepository = photoRepository;
+    }
+
+    @RequestMapping("/")
+    public String home() {
+        return "index";
     }
 
 
@@ -92,12 +97,6 @@ import java.util.Optional;
 
         //EDIT
 
- /*   public List<Category> getAll() {
-        return categoryRepository.findByOrderByName();
-        model.addAttribute("categoryList", categoryService.getAll());
-    }*/
-
-
         @GetMapping("/edit/{id}")
         public String edit(@PathVariable Integer id, Model model) {
             Optional<Photo> result = photoRepository.findById( id );
@@ -139,7 +138,7 @@ import java.util.Optional;
             @PostMapping("/delete/{id}")
             public String delete(@PathVariable Integer id) {
 
-            Photo pizzaToDelete = photoRepository.findById( id ).orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND ) );
+            Photo photoToDelete = photoRepository.findById( id ).orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND ) );
             photoRepository.deleteById( id );
             return "redirect:/photos";
         }

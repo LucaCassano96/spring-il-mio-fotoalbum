@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/resources :: headResources('Create Category')"></head>
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('categories')"></nav>
+<div class="container mt-5">
+    <h1>Nuova Categoria</h1>
+
+    <div th:if="${created}" class="alert alert-success" role="alert">
+        Categoria creata con successo!
+    </div>
+
+    <form th:action="@{/categories/create}" method="post" th:object="${category}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome della categoria</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Crea Categoria</button>
+    </form>
+<div>
+    <a th:href="@{/photos}" class="btn btn-primary text-white my-3">Torna alla lista di foto</a>
+</div>
+
+</div>
+<script th:if="${created}" th:inline="javascript">
+    /*<![CDATA[*/
+    if (${created}) {
+        alert('Categoria creata con successo!');
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

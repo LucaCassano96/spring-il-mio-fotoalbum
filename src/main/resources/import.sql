@@ -8,3 +8,13 @@ INSERT INTO categories (name) VALUES ('animali');
 INSERT INTO categories (name) VALUES ('architettura');
 INSERT INTO categories (name) VALUES ('street-photograpy');
 INSERT INTO categories (name) VALUES ('pubblicità');
+
+INSERT INTO roles (id, name) VALUES(1, 'ADMIN');
+INSERT INTO roles (id, name) VALUES(2, 'USER');
+
+INSERT INTO users (email, first_name, last_name, registered_at, password) VALUES('luca@email.com', 'Luca', 'Cassano', '2023-11-26 10:35', '{noop}luca');
+INSERT INTO users (email, first_name, last_name, registered_at, password) VALUES('alessio@email.com', 'Alessio', 'Cassano', '2023-11-26 10:35','{noop}alessio');
+
+INSERT INTO users_roles (user_id, roles_id) VALUES(1, 1);
+INSERT INTO users_roles (user_id, roles_id) VALUES(1, 2);
+INSERT INTO users_roles (user_id, roles_id) VALUES(2, 2);
